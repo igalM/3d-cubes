@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import Square from 'src/app/models/square';
-import { SquaresService } from 'src/app/services/squares.service';
 
 @Component({
   selector: 'square-item',
@@ -10,16 +9,16 @@ import { SquaresService } from 'src/app/services/squares.service';
 export class SquaresItemComponent implements OnInit {
 
   @Input() square: Square = null;
+  @Output() changeColorEmitter: EventEmitter<string> = new EventEmitter();
 
-  constructor(
-    private readonly squaresService: SquaresService
-  ) { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
   changeColor() {
-    this.square.color = this.squaresService.getRandomRgb();
+    this.changeColorEmitter.emit(this.square.id);
   }
 
 }

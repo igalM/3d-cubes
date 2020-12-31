@@ -1,4 +1,4 @@
-export default class Square {
-    id: number;
+export default interface Square {
+    id: string;
     color: string;
 }

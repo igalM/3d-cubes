@@ -1,11 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SquaresItemComponent } from './components/squares-item/squares-item.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { ErrorComponent } from './pages/error/error.component';
+import { environment } from 'src/environments/environment';
 
 const components = [
   AppComponent,
@@ -19,12 +23,14 @@ const angularModules = [
   AppRoutingModule
 ];
 
-const services = [];
+const externalModules = [
+  AngularFireModule.initializeApp(environment.firebaseConfig),
+  AngularFireDatabaseModule
+]
 
 @NgModule({
   declarations: [components],
-  imports: [angularModules],
-  providers: [services],
+  imports: [angularModules, externalModules],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
