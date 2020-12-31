@@ -6,16 +6,10 @@ import Square from 'src/app/models/square';
   templateUrl: './squares-item.component.html',
   styleUrls: ['./squares-item.component.scss']
 })
-export class SquaresItemComponent implements OnInit {
+export class SquaresItemComponent {
 
   @Input() square: Square = null;
   @Output() changeColorEmitter: EventEmitter<string> = new EventEmitter();
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
   changeColor() {
     this.changeColorEmitter.emit(this.square.id);

@@ -15,6 +15,7 @@ export class SquaresService {
   constructor(
     private readonly firestore: AngularFirestore
   ) {
+
     this.squaresCollection = this.firestore.collection('squares');
     this.squares$ = this.squaresCollection.snapshotChanges()
       .pipe(
@@ -26,6 +27,7 @@ export class SquaresService {
           });
         })
       );
+
   }
 
   async updateSquare(id: string): Promise<void> {
@@ -38,7 +40,6 @@ export class SquaresService {
       throw err;
     }
   }
-
 
   getRandomRgb(): string {
     const num = Math.round(0xffffff * Math.random());
