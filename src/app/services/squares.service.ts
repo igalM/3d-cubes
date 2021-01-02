@@ -1,52 +1,49 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import Square from '../models/square';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import AppState from '../models/appState';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SquaresService {
 
-  squaresCollection: AngularFirestoreCollection<Square> = null;
+  stateCollection: AngularFirestoreCollection<AppState> = null;
   squares$: Observable<Square[]> = null;
+  firestoreCollectionId: string = '2Hz6IinpIvtnu8Gtcb9s';
+  lastUpdatedId: string = '';
 
   constructor(
     private readonly firestore: AngularFirestore
   ) {
-
-    this.squaresCollection = this.firestore.collection('squares');
-    this.squares$ = this.squaresCollection.snapshotChanges()
+    this.stateCollection = this.firestore.collection('squares');
+    this.squares$ = this.stateCollection.valueChanges()
       .pipe(
         map(data => {
-          return data.map(p => {
-            const square = p.payload.doc;
-            const id = square.id;
-            return { id, ...square.data() } as Square;
-          });
+          this.lastUpdatedId = data[0].lastUpdatedId;
+          return data[0].squares;
         })
       );
-
   }
 
   async updateSquare(id: string): Promise<void> {
     const newColor = this.getRandomRgb();
     try {
-      await this.squaresCollection
-        .doc(id)
-        .update({ color: newColor });
+      await this.stateCollection
+        .doc(this.firestoreCollectionId)
+        .update({ ['squares.' + id]: newColor, lastUpdatedId: id });
     } catch (err) {
-      throw err;
+      console.log(err);
     }
   }
 
-  getRandomRgb(): string {
-    const num = Math.round(0xffffff * Math.random());
-    const r = num >> 16;
-    const g = num >> 8 & 255;
-    const b = num & 255;
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+  getRandomRgb(): number[] {
+    const r = Math.random();
+    const g = Math.random();
+    const b = Math.random();
+    return [r, g, b];
   }
 
 }

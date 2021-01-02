@@ -1,8 +1,1 @@
-<div class="container">
-    <h1 *ngIf="showError">Some error occured, please try again.</h1>
-    <div class="squares-container">
-        <square-item (changeColorEmitter)="updateSquareColor($event)"
-            *ngFor="let sq of squares | async; trackBy: trackSquaresFn" [square]="sq">
-        </square-item>
-    </div>
-</div>
+<canvas #canvas></canvas>
